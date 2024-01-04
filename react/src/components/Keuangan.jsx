@@ -77,7 +77,6 @@ import { useStateContext } from "../contexts/ContextProvider";
 export default function Keuangan() {
   const { currentUser } = useStateContext();
 
-  const [hasilInputan, setHasilInputan]= useState([]);
   const [inputanKategori, setInputanKategori] = useState("");
   const [inputanNominal, setInputanNominal] = useState("");
   const [inputanFile, setInputanFile] = useState();

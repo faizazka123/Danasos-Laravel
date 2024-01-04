@@ -9,7 +9,7 @@ import {
   Select,
   Option,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 
 export default function Profile() {
