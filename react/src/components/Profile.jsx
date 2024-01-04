@@ -26,7 +26,7 @@ export default function Profile() {
   return (
     <>
       <div className="bg-gray-100 mb-12 rounded-x">
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg max-w-3xl mx-auto mt-3 shadow-xl">
+        <div className="bg-white overflow-hidden sm:rounded-lg max-w-3xl mx-auto mt-3 shadow-xl">
           <div className="mt-2 py-5 sm:px-6">
             <div className="mt-5 border-b-4 border-yellow-300 rounded-lg"></div>
             <div className="mt-4 max-w-l mx-auto bg-white overflow-hidden md:max-w-2xl">

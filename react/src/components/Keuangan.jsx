@@ -26,7 +26,7 @@ const tabs = [
     value: "Pending",
   },
 ];
-const tableHead = ["Tanggal", "Kategori", "Nominal", "Status", "Bukti"];
+const tableHead = ["Tanggal", "Kategori", "Nominal", "Status", "image"];
 const tableRows = [
   {
     id: 1,
@@ -73,38 +73,63 @@ const tableRows = [
 ];
 import { useEffect, useState } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
+import axiosClient from '../axios.js'
+import { useNavigate } from "react-router-dom";
+import { format } from 'date-fns';
 
 export default function Keuangan() {
+  let currentDate = format(new Date(), 'MMMM do yyyy, h:mm:ss a');
+  console.log(currentDate);
+
   const { currentUser } = useStateContext();
-
-  const [inputanKategori, setInputanKategori] = useState("");
-  const [inputanNominal, setInputanNominal] = useState("");
-  const [inputanFile, setInputanFile] = useState("");
-
   const [isInput, setIsInput] = useState("Input");
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const handleOpen = () => {
     setOpen(!open);
   };
 
-  // kalau mau make
-  // function handleSubmit(event) {
-  //   event.preventDefault()
-  //   const url = 'http://localhost:3000/uploadFile';
-  //   const formData = new FormData();
-  //   formData.append('Kategori', inputanKategori);
-  //   formData.append('Nominal', inputanNominal);
-  //   formData.append('file', file);
-  //   const config = {
-  //     headers: {
-  //       'content-type': 'multipart/form-data',
-  //     },
-  //   };
-  //   axios.post(url, formData, config).then((response) => {
-  //     console.log(response.data);
-  //   });
+  const [inputan, setInput] = useState({
+    nip: '111',
+    jenis_transaksi: isInput,
+    kategori_transaksi: "",
+    tanggal_transaksi: "",
+    jumlah: '',
+    image: null,
+    image_url: null,
+    status: 'pending',
+  });
 
-  // }
+  const onImageChoose = (ev) => {
+    const file = ev.target.files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setInput({
+        ...inputan,
+        image: file,
+        image_url: reader.result,
+      });
+
+      ev.target.value = "";
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const onSubmit = (ev) => {
+    ev.preventDefault();
+
+    const payload = { ...inputan };
+    if (payload.image) {
+      payload.image = payload.image_url
+    }
+    delete payload.image_url;
+    axiosClient.post('transaksi', payload).then((res) => {
+      console.log(res);
+      navigate('/keuangan')
+    });
+
+  };
 
   return (
     <div className="mt-4 mx-10">
@@ -126,46 +151,61 @@ export default function Keuangan() {
         handler={handleOpen}
         className="bg-transparent shadow-none"
       >
-        <Card className="mx-auto w-full max-w-[24rem]">
-          <CardBody className="flex flex-col gap-4">
-            <Typography variant="h4" color="blue-gray">
-              {isInput}
-            </Typography>
-            <Typography
-              className="mb-3 font-normal"
-              variant="paragraph"
-              color="gray"
-            >
-              Masukkan Data Keuangan Dibawah Ini!
-            </Typography>
-            <Typography className="-mb-2" variant="h6">
-              Kategori
-            </Typography>
-            <Input label="Kas/Penjualan/Acara" size="lg" type="text" value={inputanKategori}onChange={e => setInputanKategori(e.target.value)}
-            required />
-            <Typography className="-mb-2" variant="h6">
-              Nominal
-            </Typography>
-            <Input label="10000" size="lg" type="number" value={inputanNominal}onChange={e => setInputanNominal(e.target.value)} required />
-            <Typography className="-mb-2" variant="h6">
-              Bukti
-            </Typography>
-            <Typography
-              as="a"
-              variant="small"
-              color="red"
-              className="ml-1 font-bold"
-            >
-              File dalam bentuk .PDF
-            </Typography>
-            <Input label="File" size="lg" type="file" multiple accept="image/jpg, image/png" onChange={e => setInputanFile(e.target.files[0].name)} required />
-          </CardBody>
-          <CardFooter className="pt-0">
-            <Button variant="gradient" fullWidth>
-              Simpan
-            </Button>
-          </CardFooter>
-        </Card>
+        <form action="#" method="POST" onSubmit={onSubmit}>
+          <Card className="mx-auto w-full max-w-[24rem]">
+            <CardBody className="flex flex-col gap-4">
+              <Typography variant="h4" color="blue-gray">
+                {isInput}
+              </Typography>
+              <Typography
+                className="mb-3 font-normal"
+                variant="paragraph"
+                color="gray"
+              >
+                Masukkan Data Keuangan Dibawah Ini!
+              </Typography>
+              <Typography className="-mb-2" variant="h6">
+                Kategori
+              </Typography>
+              <Input label="Kas/Penjualan/Acara" size="lg" type="text" value={inputan.kategori_transaksi} onChange={(ev) => setInput({ ...inputan, kategori_transaksi: ev.target.value })}
+                required />
+              <Typography className="-mb-2" variant="h6">
+                Nominal
+              </Typography>
+              <Input label="10000" size="lg" type="number" value={inputan.jumlah} onChange={(ev) => setInput({ ...inputan, jumlah: ev.target.value })} required />
+              <Typography className="-mb-2" variant="h6">
+                image
+              </Typography>
+              <Typography
+                as="a"
+                variant="small"
+                color="red"
+                className="ml-1 font-bold"
+              >
+                File dalam bentuk .PDF
+              </Typography>
+              <button
+                type="button"
+                className="relative ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                <input
+                  type="file"
+                  className="absolute left-0 top-0 right-0 bottom-0 opacity-0"
+                  onChange={onImageChoose}
+                />
+                Change
+              </button>
+              <Typography className="text-center">
+                {inputan.image ? inputan.image.name : ''}
+              </Typography>
+            </CardBody>
+            <CardFooter className="pt-0">
+              <Button variant="gradient" fullWidth type="submit">
+                Simpan
+              </Button>
+            </CardFooter>
+          </Card>
+        </form>
       </Dialog>
     </div>
   );

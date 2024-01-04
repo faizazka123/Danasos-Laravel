@@ -11,7 +11,12 @@ class StoretransaksiRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
+    }
+
+    protected function prepareForValidation()
+    {
+
     }
 
     /**
@@ -22,7 +27,14 @@ class StoretransaksiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nip' => 'exists:users,nip',
+            'jenis_transaksi' => 'string',
+            'kategori_transaksi' => 'string|required',
+            'tanggal_transaksi' => 'nullable|date',
+            'jumlah' => 'integer|required',
+            'deskripsi' => 'nullable|string',
+            'bukti' => 'nullable',
+            'status' => 'nullable',
         ];
     }
 }
