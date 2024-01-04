@@ -82,14 +82,13 @@ export default function PercobaanTable({
     if (!(search === "")) {
       console.log(search);
       setItemShow(
-        itemShow.filter((a) => a.name.toLowerCase().match(search.toLowerCase()))
+        itemShow.filter((a) => a.status.toLowerCase().match(search.toLowerCase()))
       );
     }
   }, [kategori, search, itemShow]);
 
   // eslint-disable-next-line no-unused-vars
   const exportThis = itemShow.map(({ id, status, ...sisa }) => sisa);
-
   return (
     <Card className="h-full w-full">
       <CardHeader floated={false} shadow={false} className="rounded-none">

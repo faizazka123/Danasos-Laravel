@@ -15,6 +15,10 @@ import { useStateContext } from "../contexts/ContextProvider";
 export default function Profile() {
   const { currentUser } = useStateContext();
 
+  const [nama, setNama] = useState("");
+  const [email, setEmail] = useState("");
+  const [jabatan, setJabatan] = useState("");
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(!open);
@@ -164,31 +168,19 @@ export default function Profile() {
             <Typography className="-mb-2" variant="h6">
               Nama
             </Typography>
-            <Input label="Siapa ya" size="lg" type="text" required />
+            <Input label="Siapa ya" size="lg" type="text" value={nama} onChange={e => setNama(e.target.value)} required />
             <Typography className="-mb-2" variant="h6">
               Email
             </Typography>
-            <Input label="example@gmail.com" size="lg" type="email" required />
+            <Input label="example@gmail.com" size="lg" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
             <Typography className="-mb-2" variant="h6">
               Jabatan
             </Typography>
-            <Select label="Jabatan">
-              <Option>Bendahara</Option>
-              <Option>Admin</Option>
-              <Option>User</Option>
+            <Select label="Jabatan" value={jabatan} onChange={e => setJabatan(e)}>
+              <Option value="Bendahara">Bendahara</Option>
+              <Option value="Admin">Admin</Option>
+              <Option value="User">User</Option>
             </Select>
-            <Typography className="-mb-2" variant="h6">
-              Gambar
-            </Typography>
-            <Typography
-              as="a"
-              variant="small"
-              color="red"
-              className="ml-1 font-bold"
-            >
-              File dalam bentuk .JPG/.JPEG/.PNG
-            </Typography>
-            <Input label="File" size="lg" type="file" required />
           </CardBody>
           <CardFooter className="pt-0">
             <Button variant="gradient" onClick={handleOpen} fullWidth>

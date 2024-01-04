@@ -77,6 +77,11 @@ import { useStateContext } from "../contexts/ContextProvider";
 export default function Keuangan() {
   const { currentUser } = useStateContext();
 
+  const [hasilInputan, setHasilInputan]= useState([]);
+  const [inputanKategori, setInputanKategori] = useState("");
+  const [inputanNominal, setInputanNominal] = useState("");
+  const [inputanFile, setInputanFile] = useState();
+
   const [isInput, setIsInput] = useState("Input");
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
@@ -118,11 +123,12 @@ export default function Keuangan() {
             <Typography className="-mb-2" variant="h6">
               Kategori
             </Typography>
-            <Input label="Kas/Penjualan/Acara" size="lg" type="text" required />
+            <Input label="Kas/Penjualan/Acara" size="lg" type="text" value={inputanKategori}onChange={e => setInputanKategori(e.target.value)}
+            required />
             <Typography className="-mb-2" variant="h6">
               Nominal
             </Typography>
-            <Input label="10000" size="lg" type="number" required />
+            <Input label="10000" size="lg" type="number" value={inputanNominal}onChange={e => setInputanNominal(e.target.value)} required />
             <Typography className="-mb-2" variant="h6">
               Bukti
             </Typography>
