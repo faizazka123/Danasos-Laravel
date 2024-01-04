@@ -1,17 +1,20 @@
 import { useState } from "react";
-import Dashboard from "./Dashboard";
-import Keuangan from "./Keuangan";
-import Rekapitulasi from "./Rekapitulasi";
-import Profile from "./Profile";
-import Validasi from "./Validasi";
 import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
+import {
+  Popover,
+  PopoverHandler,
+  PopoverContent,
+} from "@material-tailwind/react";
+import {
+  BellAlertIcon
+} from "@heroicons/react/24/outline";
 // eslint-disable-next-line react/prop-types
 export default function Navbar({ data }) {
   const { currentUser, userToken } = useStateContext();
 
   if (!userToken) {
-    return <Navigate to='login'/>
+    return <Navigate to='login' />
   }
 
   const [open, setOpen] = useState(true);
@@ -75,12 +78,21 @@ export default function Navbar({ data }) {
         </div>
         <div className="h-screen flex-1">
           <div className="pt-5 ps-7">
-            <p>
-              <span className="text-gray-400">Pages</span> {pathname}
-            </p>
-            <h5>
-              <b></b>
-            </h5>
+            <div className="flex justify-between">
+              <p>
+                <span className="text-gray-400">Pages</span> {pathname}
+              </p>
+              <Popover placement="bottom">
+                <PopoverHandler>
+                  <div className="w-8 me-10 cursor-pointer">
+                    <BellAlertIcon />
+                  </div>
+                </PopoverHandler>
+                <PopoverContent>
+                  <span className="text-red-600">Belum membayar uang kas bulan November!</span>
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
 
           <Outlet />

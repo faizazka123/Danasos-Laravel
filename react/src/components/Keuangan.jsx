@@ -71,7 +71,7 @@ const tableRows = [
     status: "Terima",
   },
 ];
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 
 export default function Keuangan() {
@@ -79,13 +79,32 @@ export default function Keuangan() {
 
   const [inputanKategori, setInputanKategori] = useState("");
   const [inputanNominal, setInputanNominal] = useState("");
-  const [inputanFile, setInputanFile] = useState();
+  const [inputanFile, setInputanFile] = useState("");
 
   const [isInput, setIsInput] = useState("Input");
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(!open);
   };
+
+  // kalau mau make
+  // function handleSubmit(event) {
+  //   event.preventDefault()
+  //   const url = 'http://localhost:3000/uploadFile';
+  //   const formData = new FormData();
+  //   formData.append('Kategori', inputanKategori);
+  //   formData.append('Nominal', inputanNominal);
+  //   formData.append('file', file);
+  //   const config = {
+  //     headers: {
+  //       'content-type': 'multipart/form-data',
+  //     },
+  //   };
+  //   axios.post(url, formData, config).then((response) => {
+  //     console.log(response.data);
+  //   });
+
+  // }
 
   return (
     <div className="mt-4 mx-10">
@@ -139,10 +158,10 @@ export default function Keuangan() {
             >
               File dalam bentuk .PDF
             </Typography>
-            <Input label="File" size="lg" type="file" required />
+            <Input label="File" size="lg" type="file" multiple accept="image/jpg, image/png" onChange={e => setInputanFile(e.target.files[0].name)} required />
           </CardBody>
           <CardFooter className="pt-0">
-            <Button variant="gradient" onClick={handleOpen} fullWidth>
+            <Button variant="gradient" fullWidth>
               Simpan
             </Button>
           </CardFooter>
