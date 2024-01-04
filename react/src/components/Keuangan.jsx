@@ -78,7 +78,7 @@ import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
 
 export default function Keuangan() {
-  let currentDate = format(new Date(), 'MMMM do yyyy, h:mm:ss a');
+  let currentDate = format(new Date(), 'yyyy-mm-dd');
   console.log(currentDate);
 
   const { currentUser } = useStateContext();
@@ -93,7 +93,7 @@ export default function Keuangan() {
     nip: '111',
     jenis_transaksi: isInput,
     kategori_transaksi: "",
-    tanggal_transaksi: "",
+    tanggal_transaksi: currentDate,
     jumlah: '',
     image: null,
     image_url: null,
